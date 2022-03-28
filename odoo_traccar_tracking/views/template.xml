@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- "License URL : <https://store.webkul.com/license.html/>" -->
+<odoo>
+    <template id="traccar_map_layout" inherit_id="web.layout" name="Traccar google map">
+        <xpath expr="//html//head//script" position="after">
+            <t t-set="google_api_key" t-value="request.env['ir.config_parameter'].sudo().get_param('base_geolocalize.google_map_api_key')"/>
+            <script t-attf-src="https://maps.googleapis.com/maps/api/js?key=#{google_api_key}"></script>
+        </xpath>
+    </template>
+</odoo>
