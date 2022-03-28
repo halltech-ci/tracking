@@ -25,20 +25,20 @@
     'description': """This module works very well with Odoo 14.0""",
     'depends': [
         'fleet',
-        #'base_geolocalize',
-        #'wk_wizard_messages'
+        'base_geolocalize',
+        'wk_wizard_messages'
     ],
     'data': [
-#         'security/ir.model.access.csv',
-#         'views/template.xml',
-#         'data/trip_cron.xml',
-#         'data/trip_sequence.xml',
-#         'wizard/tracking_history_wizard_view.xml',
-#         'views/traccar_configuration_views.xml',
-#         'views/fleet_vehicle_views.xml',
-#         'views/trip_details_views.xml',
-#         'views/traccar_action_views.xml',
-#         'views/traccar_menus.xml'
+         'security/ir.model.access.csv',
+         'views/template.xml',
+         'data/trip_cron.xml',
+         'data/trip_sequence.xml',
+         'wizard/tracking_history_wizard_view.xml',
+         'views/traccar_configuration_views.xml',
+         'views/fleet_vehicle_views.xml',
+         'views/trip_details_views.xml',
+         'views/traccar_action_views.xml',
+         'views/traccar_menus.xml'
     ],
 
     'application': True,
@@ -47,5 +47,5 @@
     'auto_install': False,
 	'price'      :  149,
 	'currency'   : 'USD',
-    #'pre_init_hook': 'pre_init_check',
+    'pre_init_hook': 'pre_init_check',
 }
