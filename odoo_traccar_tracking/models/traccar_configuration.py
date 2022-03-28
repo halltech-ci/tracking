@@ -24,7 +24,7 @@ class TraccarConfigure(models.Model):
 
     name = fields.Char(
         string='Traccar URL',
-        track_visibility="onchange",
+        tracking=True,
         required=True,
     )
     instance_name = fields.Char(
@@ -32,17 +32,17 @@ class TraccarConfigure(models.Model):
         default=lambda self: self._default_instance_name())
     user = fields.Char(
         string='API User Name',
-        track_visibility="onchange",
+        tracking=True,
         required=True)
     pwd = fields.Char(
         string='API Password',
-        track_visibility="onchange",
+        tracking=True,
         required=True,
         size=100)
     status = fields.Char(string='Status', readonly=True)
     active = fields.Boolean(
         string="Active",
-        track_visibility="onchange",
+        tracking=True,
         default=True)
     connection_status = fields.Boolean(
         string="Connection Status", default=False)
