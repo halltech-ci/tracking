@@ -26,7 +26,8 @@
     'depends': [
         'fleet',
         'base_geolocalize',
-        'wk_wizard_messages'
+        'wk_wizard_messages',
+        'web',
     ],
     'data': [
          'security/ir.model.access.csv',
