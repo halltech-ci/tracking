@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- "License URL : <https://store.webkul.com/license.html/>" -->
+
+<odoo>
+    <record id="tracking_history_wizard_form" model="ir.ui.view">
+        <field name="name">tracking.history.wizard</field>
+        <field name="model">tracking.history.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Tracking History">
+                <group string="Tracking Details">
+                    <group col="2">
+                        <field name="vehicle_id"/>
+                        <field name="driver_id"/>
+                    </group>
+                </group>
+                <group string="Date Range">
+                    <group col="2">
+                        <field name="date_from"/>
+                    </group>
+                    <group col="2">
+                        <field name="date_to"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="get_trip_reports" string="Fetch Trip Report" 
+                        type="object" icon="fa-car" class="oe_highlight btn-success"
+                        invisible= "context.get('All') == True"/>
+                    <button name="show_trip_reports" string="Show Trip Report" 
+                        type="object" icon="fa-car" class="oe_highlight btn-success"
+                        invisible= "not context.get('All') == True"/>
+                    <button special="cancel" class="oe_highlight btn-danger" icon="fa-archive" string="Close" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <record id="tracking_history_map_wizard_form" model="ir.ui.view">
+        <field name="name">tracking.history.wizard</field>
+        <field name="model">tracking.history.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Tracking History" create="0" edit="0">
+                <group string="Trip History Between This Duration">
+                    <group>
+                        <field name="date_from" string="From"/>
+                    </group>
+                    <group>
+                        <field name="date_to" string="To"/>
+                    </group>
+                </group>
+                <field name="source_long" string="Longitude" invisible="0"/>
+                <field name="source_lat" string="Latitude" invisible="0"/>
+                <field name="destination_long" string="Longitude" invisible="0"/>
+                <field name="destination_lat" string="Latitude" invisible="0"/>
+                <div id="googleMap" style="width:100%;height:450px;"></div>
+                    <script>
+                            var directionsService = new google.maps.DirectionsService();
+                            var directionsRenderer = new google.maps.DirectionsRenderer();
+                            var map = new google.maps.Map(document.getElementById("googleMap"), {
+                            zoom: 7,
+                            center: {
+                                lat: 41.85,
+                                lng: -87.65
+                            }
+                            });
+                            directionsRenderer.setMap(map);
+                            if (document.getElementsByName('source_long')[0]) {
+                                var start = document.getElementsByName('source_long')[0].innerText + ', ' + document.getElementsByName('source_lat')[0].innerText;
+                                var end = document.getElementsByName('destination_long')[0].innerText + ', ' + document.getElementsByName('destination_lat')[0].innerText;
+                                calculateAndDisplayRoute(directionsService, directionsRenderer);
+                                function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+                                    directionsService.route(
+                                    {
+                                        origin: start,
+                                        destination: end,
+                                        travelMode: google.maps.TravelMode.DRIVING
+                                    },
+                                    (response, status) => {
+                                        if (status === "OK") {
+                                        directionsRenderer.setDirections(response);
+                                        } else {
+                                        window.alert("Directions request failed due to " + status);
+                                        }
+                                    }
+                                    );
+                                }
+                            }
+                    </script>
+            </form>
+        </field>
+    </record>
+
+    <record id="tracking_vehicle_location_wizard_form" model="ir.ui.view">
+        <field name="name">tracking.history.wizard</field>
+        <field name="model">tracking.history.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Driver Locations" create="0" edit="0">
+                <field name="date_to" string="Select Date"/>
+                <footer>
+                    <button name="get_driver_locations" string="Fetch Driver Locations" 
+                        type="object" icon="fa-male" class="oe_highlight btn-success"
+                        invisible= "context.get('All') == True"/>
+                    <button special="cancel" class="oe_highlight btn-danger" icon="fa-archive" string="Close" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="tracking_vehicle_location_map_wizard_form" model="ir.ui.view">
+        <field name="name">tracking.history.wizard</field>
+        <field name="model">tracking.history.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Driver Locations" create="0" edit="0">
+                <field name="date_to" string="Longitude" invisible="0"/>
+                <field name="driver_locations" string="Latitude" invisible="0"/>
+                <div id="googleMap" style="width:100%;height:500px;"></div>
+                    <script>
+                            var driver_locations = document.getElementsByName('driver_locations')[0].innerText;
+                            if (driver_locations) {
+                                driver_locations = driver_locations.split(";");
+                                var locations = [];
+                                for (let j = 0; j &lt; driver_locations.length; j++) {
+                                    var element = driver_locations[j].split(":");
+                                    locations.push([element[0], element[1].split(',')[0], element[1].split(',')[1], j]);
+                                }
+                                    var map = new google.maps.Map(document.getElementById('googleMap'), {
+                                    zoom: 8,
+                                    center: new google.maps.LatLng(-33.92, 151.25),
+                                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                                    });
+                                    var onClickWindow = new google.maps.InfoWindow();
+                                    var marker, i;
+                                    for (i = 0; i &lt; locations.length; i++) {  
+                                        marker = new google.maps.Marker({
+                                            position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                                            map: map
+                                        });
+                                        var showpopup = new google.maps.InfoWindow({
+                                            content: "<b style='color:#7C7BAD;'>"+locations[i][0]+"</b>",
+                                            maxWidth: 160
+                                        });
+                                        showpopup.open(map, marker);
+                                        new google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                                            return function() {
+                                                onClickWindow.setContent(locations[i][0]);
+                                                onClickWindow.open(map, marker);
+                                            }
+                                            })(marker, i));
+                                    }
+                                    map.setCenter(marker.getPosition());
+                            }
+                    </script>
+            </form>
+        </field>
+    </record>
+</odoo>
