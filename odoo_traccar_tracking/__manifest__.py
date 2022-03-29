@@ -24,10 +24,10 @@
     'summary': 'Basic Traccar Application',
     'description': """This module works very well with Odoo 14.0""",
     'depends': [
+        'web',
         'fleet',
         'base_geolocalize',
         'wk_wizard_messages',
-        'web',
     ],
     'data': [
          'security/ir.model.access.csv',
